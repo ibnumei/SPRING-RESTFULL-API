@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import jakarta.transaction.Transactional;
 import msjavamicro.restfull.entity.User;
 import msjavamicro.restfull.model.RegisterUserRequest;
+import msjavamicro.restfull.model.UserResponse;
 import msjavamicro.restfull.repository.UserRepository;
 import msjavamicro.restfull.security.BCrypt;
 
@@ -34,5 +35,12 @@ public class UserService {
         user.setName(request.getName());
 
         userRepository.save(user);
+    }
+
+    public UserResponse get(User user) {
+        return UserResponse.builder()
+                .username(user.getUsername())
+                .name(user.getName())
+                .build();
     }
 }
