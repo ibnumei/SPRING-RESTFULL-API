@@ -1,5 +1,7 @@
 package msjavamicro.restfull.entity;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,4 +27,7 @@ public class Category {
     @ManyToOne
     @JoinColumn(name = "username", referencedColumnName = "username")
     private User user;
+
+    @OneToMany(mappedBy = "category")
+    private List<Transaction> transactions;
 }
