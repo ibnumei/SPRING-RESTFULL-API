@@ -1,6 +1,7 @@
 package msjavamicro.restfull.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails.Address;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -12,6 +13,7 @@ import msjavamicro.restfull.model.CategoryResponse;
 import msjavamicro.restfull.model.CreateCategoryRequest;
 import msjavamicro.restfull.repository.CategoryRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -52,5 +54,12 @@ public class CategoryService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
 
         return toCategoryResponse(category);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CategoryResponse> list(User user){
+
+        List<Category> categories = categoryRepository.findAllByUser(user);
+        return categories.stream().map(this::toCategoryResponse).toList();
     }
 }

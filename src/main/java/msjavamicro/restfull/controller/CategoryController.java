@@ -1,5 +1,7 @@
 package msjavamicro.restfull.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,5 +37,15 @@ public class CategoryController {
     public WebResponse<CategoryResponse> get(User user, @PathVariable("categoryId") String categoryId) {
         CategoryResponse categoryResponse = categoryService.get(user, categoryId);
         return WebResponse.<CategoryResponse>builder().data(categoryResponse).build();
+    }
+
+    @GetMapping(
+            path = "/api/category",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse<List<CategoryResponse>> list(User user) {
+        List<CategoryResponse> categoryResponse = categoryService.list(user);
+        return WebResponse.<List<CategoryResponse>>builder().data(categoryResponse).build();
+
     }
 }
