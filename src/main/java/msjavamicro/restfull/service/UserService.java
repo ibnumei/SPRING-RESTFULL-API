@@ -6,7 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import org.springframework.transaction.annotation.Transactional;
+
+import msjavamicro.restfull.entity.Category;
 import msjavamicro.restfull.entity.User;
+import msjavamicro.restfull.model.CategoryResponse;
+import msjavamicro.restfull.model.CreateCategoryRequest;
 import msjavamicro.restfull.model.RegisterUserRequest;
 import msjavamicro.restfull.model.UserResponse;
 import msjavamicro.restfull.repository.UserRepository;
@@ -21,6 +25,9 @@ public class UserService {
     @Autowired
     private ValidationService validationService;
 
+    @Autowired
+    private CategoryService categoryService;
+
     @Transactional
     public void register(RegisterUserRequest request) {
         validationService.validate(request);
@@ -33,9 +40,14 @@ public class UserService {
         user.setUsername(request.getUsername());
         user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
         user.setName(request.getName());
-        user.setBalance(request.getBalance());
+        user.setBalance(0);
 
         userRepository.save(user);
+
+        CreateCategoryRequest category = new CreateCategoryRequest();
+        category.setCategoryName("TopUp");
+        CategoryResponse categoryResponse = categoryService.create(user, category);
+
     }
 
     public UserResponse get(User user) {
