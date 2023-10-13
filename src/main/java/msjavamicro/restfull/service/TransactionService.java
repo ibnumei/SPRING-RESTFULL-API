@@ -20,6 +20,7 @@ import msjavamicro.restfull.model.TransactionResponse;
 import msjavamicro.restfull.model.CategoryResponse;
 import msjavamicro.restfull.model.CreateCategoryRequest;
 import msjavamicro.restfull.model.CreateTransactionRequest;
+import msjavamicro.restfull.model.TransactionHistoryRequest;
 import msjavamicro.restfull.repository.CategoryRepository;
 import msjavamicro.restfull.repository.TransactionRepository;
 
@@ -68,4 +69,14 @@ public class TransactionService {
         List<Transaction> transactions = transactionRepository.findAllByUser(user);
         return transactions.stream().map(this::toTransactionResponse).toList();
     }
+
+    @Transactional(readOnly = true)
+    public List<Object[]> getHistoricalTransaction(User user, TransactionHistoryRequest request)  {
+        // Category category = categoryRepository.findFirstByUserAndId(user, request.getCategoryId())
+        //         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
+
+        List<Object[]> result = transactionRepository.historicalTransaction(request.getStartDate(), request.getEndDate(), user.getUsername());
+        return result;
+    }
+
 }

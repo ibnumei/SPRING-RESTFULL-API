@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import msjavamicro.restfull.model.CategoryResponse;
 import msjavamicro.restfull.model.CreateTransactionRequest;
+import msjavamicro.restfull.model.TransactionHistoryRequest;
 import msjavamicro.restfull.model.TransactionResponse;
 import msjavamicro.restfull.model.WebResponse;
 import msjavamicro.restfull.service.TransactionService;
@@ -45,5 +46,15 @@ public class TransactionController {
         List<TransactionResponse> transactionResponses = transactionService.list(user);
         return WebResponse.<List<TransactionResponse>>builder().data(transactionResponses).build();
 
+    }
+
+    @PostMapping(
+            path = "/api/transaction/history",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public List<Object[]> get(User user,
+                                               @RequestBody TransactionHistoryRequest request) {
+    List<Object[]>result = transactionService.getHistoricalTransaction(user, request);
+    return result;
     }
 }
