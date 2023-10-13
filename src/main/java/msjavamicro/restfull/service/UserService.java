@@ -33,6 +33,7 @@ public class UserService {
         user.setUsername(request.getUsername());
         user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
         user.setName(request.getName());
+        user.setBalance(request.getBalance());
 
         userRepository.save(user);
     }
@@ -41,6 +42,7 @@ public class UserService {
         return UserResponse.builder()
                 .username(user.getUsername())
                 .name(user.getName())
+                .balance(user.getBalance())
                 .build();
     }
 }

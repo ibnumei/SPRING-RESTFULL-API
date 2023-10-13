@@ -14,4 +14,6 @@ public class UserResponse {
     private String username;
 
     private String name;
+
+    private Integer balance;
 }
