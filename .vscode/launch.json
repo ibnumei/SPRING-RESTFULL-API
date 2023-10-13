@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MsJavaMicroResTfullApiApplication<spring-restfull-api>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "msjavamicro.restfull.MsJavaMicroResTfullApiApplication",
+            "projectName": "spring-restfull-api",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
