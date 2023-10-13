@@ -21,9 +21,6 @@ public class Category {
     @Column(name = "category_name")
     private String categoryName;
 
-    @Column(name = "specific_user")
-    private Boolean specificUser;
-
     @ManyToOne
     @JoinColumn(name = "username", referencedColumnName = "username")
     private User user;

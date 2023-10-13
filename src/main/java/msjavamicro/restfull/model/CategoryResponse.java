@@ -15,6 +15,4 @@ public class CategoryResponse {
 
     private String categoryName;
 
-    private Boolean specificUser;
-
 }

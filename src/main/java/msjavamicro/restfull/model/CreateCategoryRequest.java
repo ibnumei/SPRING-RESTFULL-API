@@ -17,5 +17,4 @@ public class CreateCategoryRequest {
     @Size(max = 50)
     private String categoryName;
 
-    private Boolean specificUser;
 }

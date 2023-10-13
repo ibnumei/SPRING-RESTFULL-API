@@ -31,7 +31,6 @@ public class CategoryService {
         Category category = new Category();
         category.setId(UUID.randomUUID().toString());
         category.setCategoryName(request.getCategoryName());
-        category.setSpecificUser(request.getSpecificUser());
         category.setUser(user);
 
         categoryRepository.save(category);
@@ -43,7 +42,6 @@ public class CategoryService {
         return CategoryResponse.builder()
                 .id(category.getId())
                 .categoryName(category.getCategoryName())
-                .specificUser(category.getSpecificUser())
                 .build();
     }
 
