@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import msjavamicro.restfull.entity.User;
 import msjavamicro.restfull.model.RegisterUserRequest;
 import msjavamicro.restfull.model.UserResponse;
