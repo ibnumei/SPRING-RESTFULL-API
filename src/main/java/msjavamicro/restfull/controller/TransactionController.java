@@ -1,12 +1,16 @@
 package msjavamicro.restfull.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import msjavamicro.restfull.model.CategoryResponse;
 import msjavamicro.restfull.model.CreateTransactionRequest;
 import msjavamicro.restfull.model.TransactionResponse;
 import msjavamicro.restfull.model.WebResponse;
@@ -31,5 +35,15 @@ public class TransactionController {
         request.setCategoryId(categoryId);
         TransactionResponse transactionResponse = transactionService.create(user, request);
         return WebResponse.<TransactionResponse>builder().data(transactionResponse).build();
+    }
+
+    @GetMapping(
+            path = "/api/transaction",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse<List<TransactionResponse>> list(User user) {
+        List<TransactionResponse> transactionResponses = transactionService.list(user);
+        return WebResponse.<List<TransactionResponse>>builder().data(transactionResponses).build();
+
     }
 }

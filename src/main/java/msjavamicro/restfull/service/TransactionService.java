@@ -4,6 +4,7 @@ import java.security.Timestamp;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,5 +60,12 @@ public class TransactionService {
                 .amount(transaction.getAmount())
                 .description(transaction.getDescription())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<TransactionResponse> list(User user){
+
+        List<Transaction> transactions = transactionRepository.findAllByUser(user);
+        return transactions.stream().map(this::toTransactionResponse).toList();
     }
 }
