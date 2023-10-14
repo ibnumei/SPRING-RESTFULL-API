@@ -23,6 +23,7 @@ import msjavamicro.restfull.model.CreateTransactionRequest;
 import msjavamicro.restfull.model.TransactionHistoryRequest;
 import msjavamicro.restfull.repository.CategoryRepository;
 import msjavamicro.restfull.repository.TransactionRepository;
+import msjavamicro.restfull.repository.UserRepository;
 
 @Service
 public class TransactionService {
@@ -34,6 +35,9 @@ public class TransactionService {
 
     @Autowired
     private ValidationService validationService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Transactional
     public TransactionResponse create(User user, CreateTransactionRequest request) {
@@ -50,6 +54,14 @@ public class TransactionService {
         transaction.setAmount(request.getAmount());
         transaction.setDescription(request.getDescription());
         transactionRepository.save(transaction);
+
+        if (user.getBalance() > request.getAmount())  {
+            user.setBalance(user.getBalance() - request.getAmount());
+            userRepository.save(user);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nilai Pengeluaran lebih besar dari total balance saat ini");
+        }
+        
 
         return toTransactionResponse(transaction);
     }
