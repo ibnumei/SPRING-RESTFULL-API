@@ -13,9 +13,11 @@ import msjavamicro.restfull.entity.Category;
 import msjavamicro.restfull.entity.User;
 import msjavamicro.restfull.model.CategoryResponse;
 import msjavamicro.restfull.model.CreateCategoryRequest;
+import msjavamicro.restfull.model.CreateTransactionRequest;
 import msjavamicro.restfull.model.RegisterUserRequest;
 import msjavamicro.restfull.model.UpdateUserBalanceRequest;
 import msjavamicro.restfull.model.UserResponse;
+import msjavamicro.restfull.repository.CategoryRepository;
 import msjavamicro.restfull.repository.UserRepository;
 import msjavamicro.restfull.security.BCrypt;
 
@@ -30,6 +32,12 @@ public class UserService {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private  TransactionService transactionService;
 
     @Transactional
     public void register(RegisterUserRequest request) {
@@ -65,10 +73,26 @@ public class UserService {
     public UserResponse update(User user, UpdateUserBalanceRequest request) {
         validationService.validate(request);
 
-        user.setBalance(request.getBalance() + user.getBalance());
+        // user.setBalance(request.getBalance() + user.getBalance());
 
-        userRepository.save(user);
+        // userRepository.save(user);
 
+
+        // return UserResponse.builder()
+        //         .username(user.getUsername())
+        //         .name(user.getName())
+        //         .balance(user.getBalance())
+        //         .build();
+
+        Category category = categoryRepository.findFirstByUserAndCategoryName(user, "TopUp")
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category TopUp Tidak ditemukan untuk user ini"));
+                
+        CreateTransactionRequest transaction = new CreateTransactionRequest();
+        transaction.setCategoryId(category.getId());
+        transaction.setType("credit");
+        transaction.setAmount(request.getBalance());
+        transaction.setDescription("TopUp Balance");
+        transactionService.create(user, transaction);
 
         return UserResponse.builder()
                 .username(user.getUsername())

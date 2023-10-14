@@ -13,5 +13,7 @@ import msjavamicro.restfull.entity.User;
 public interface CategoryRepository extends JpaRepository<Category, String>  {
     Optional<Category> findFirstByUserAndId(User user, String id);
 
+    Optional<Category> findFirstByUserAndCategoryName(User user, String categoryName);
+    
     List<Category> findAllByUser(User user);
 }

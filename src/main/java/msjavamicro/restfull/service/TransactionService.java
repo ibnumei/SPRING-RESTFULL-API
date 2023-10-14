@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import lombok.extern.slf4j.Slf4j;
 import msjavamicro.restfull.entity.Category;
 import msjavamicro.restfull.entity.Transaction;
 import msjavamicro.restfull.entity.User;
@@ -26,6 +27,7 @@ import msjavamicro.restfull.repository.TransactionRepository;
 import msjavamicro.restfull.repository.UserRepository;
 
 @Service
+@Slf4j
 public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
@@ -55,11 +57,16 @@ public class TransactionService {
         transaction.setDescription(request.getDescription());
         transactionRepository.save(transaction);
 
-        if (user.getBalance() > request.getAmount())  {
-            user.setBalance(user.getBalance() - request.getAmount());
-            userRepository.save(user);
+        if (request.getType().equals("debit")) {
+            if (user.getBalance() > request.getAmount()) {
+                user.setBalance(user.getBalance() - request.getAmount());
+                userRepository.save(user);
+            } else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nilai Pengeluaran lebih besar dari total balance saat ini");
+            }
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nilai Pengeluaran lebih besar dari total balance saat ini");
+            user.setBalance(request.getAmount() + user.getBalance());
+            userRepository.save(user);
         }
         
 
