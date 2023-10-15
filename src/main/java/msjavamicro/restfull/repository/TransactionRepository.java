@@ -16,7 +16,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
 
     @Query(value = "SELECT t.username AS username, c.category_name AS category_name, t.type AS type, t.amount AS amount, t.description AS description, t.created_date AS created_date " +
                     "FROM transaction t INNER JOIN category c ON c.id = t.category_id " +
-                    "WHERE t.created_date BETWEEN :param1 AND :param2 AND t.username = :param3", nativeQuery = true)
+                    "WHERE t.created_date BETWEEN CAST (:param1 AS TIMESTAMP) AND CAST (:param2 AS TIMESTAMP) AND t.username = :param3", nativeQuery = true)
     List<Object[]> historicalTransaction(String param1, String param2, String param3);
         
 }

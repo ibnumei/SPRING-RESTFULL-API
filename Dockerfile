@@ -1,14 +1,9 @@
-# Menggunakan base image OpenJDK
-FROM openjdk:11-jre-slim
+FROM openjdk:22-slim
 
-# Buat direktori aplikasi di dalam container
 RUN mkdir /app
 
-# Copy JAR file ke dalam container
-COPY target/MsJavaMicroResTfullApiApplication.jar /app/MsJavaMicroResTfullApiApplication.jar
+COPY target/spring-restfull-api-0.0.1-SNAPSHOT.jar /app/spring-restfull-api-0.0.1-SNAPSHOT.jar
 
-# Set working directory
 WORKDIR /app
 
-# Eksekusi aplikasi saat container dijalankan
-CMD ["java", "-jar", "MsJavaMicroResTfullApiApplication.jar"]
+CMD ["java", "-jar", "spring-restfull-api-0.0.1-SNAPSHOT.jar"]
