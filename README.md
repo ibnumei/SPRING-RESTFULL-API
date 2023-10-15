@@ -22,6 +22,10 @@ Get Transactiono History Based On Date Range : POST /api/transactionHistory
 ## Please open database.sql for an explanation of the database
 database.sql
 
+## Config Redis
+spring.data.redis.host=localhost
+spring.data.redis.port=6379
+
 ## User API Spec
 ### Register User
 Endpoint : POST /api/users
