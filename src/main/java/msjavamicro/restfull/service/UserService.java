@@ -73,17 +73,6 @@ public class UserService {
     public UserResponse update(User user, UpdateUserBalanceRequest request) {
         validationService.validate(request);
 
-        // user.setBalance(request.getBalance() + user.getBalance());
-
-        // userRepository.save(user);
-
-
-        // return UserResponse.builder()
-        //         .username(user.getUsername())
-        //         .name(user.getName())
-        //         .balance(user.getBalance())
-        //         .build();
-
         Category category = categoryRepository.findFirstByUserAndCategoryName(user, "TopUp")
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category TopUp Tidak ditemukan untuk user ini"));
                 
