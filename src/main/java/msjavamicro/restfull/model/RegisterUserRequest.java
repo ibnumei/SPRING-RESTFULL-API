@@ -24,4 +24,6 @@ public class RegisterUserRequest {
     @NotBlank
     @Size(max = 100)
     private String name;
+
+    private Integer balance;
 }

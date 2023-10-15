@@ -1,14 +1,23 @@
 package msjavamicro.restfull.service;
 
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import org.springframework.transaction.annotation.Transactional;
+
+import msjavamicro.restfull.entity.Category;
 import msjavamicro.restfull.entity.User;
+import msjavamicro.restfull.model.CategoryResponse;
+import msjavamicro.restfull.model.CreateCategoryRequest;
+import msjavamicro.restfull.model.CreateTransactionRequest;
 import msjavamicro.restfull.model.RegisterUserRequest;
+import msjavamicro.restfull.model.UpdateUserBalanceRequest;
 import msjavamicro.restfull.model.UserResponse;
+import msjavamicro.restfull.repository.CategoryRepository;
 import msjavamicro.restfull.repository.UserRepository;
 import msjavamicro.restfull.security.BCrypt;
 
@@ -20,6 +29,15 @@ public class UserService {
 
     @Autowired
     private ValidationService validationService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private  TransactionService transactionService;
 
     @Transactional
     public void register(RegisterUserRequest request) {
@@ -33,14 +51,42 @@ public class UserService {
         user.setUsername(request.getUsername());
         user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
         user.setName(request.getName());
+        user.setBalance(0);
 
         userRepository.save(user);
+
+        CreateCategoryRequest category = new CreateCategoryRequest();
+        category.setCategoryName("TopUp");
+        CategoryResponse categoryResponse = categoryService.create(user, category);
+
     }
 
     public UserResponse get(User user) {
         return UserResponse.builder()
                 .username(user.getUsername())
                 .name(user.getName())
+                .balance(user.getBalance())
+                .build();
+    }
+
+    @Transactional
+    public UserResponse update(User user, UpdateUserBalanceRequest request) {
+        validationService.validate(request);
+
+        Category category = categoryRepository.findFirstByUserAndCategoryName(user, "TopUp")
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category TopUp Tidak ditemukan untuk user ini"));
+                
+        CreateTransactionRequest transaction = new CreateTransactionRequest();
+        transaction.setCategoryId(category.getId());
+        transaction.setType("credit");
+        transaction.setAmount(request.getBalance());
+        transaction.setDescription("TopUp Balance");
+        transactionService.create(user, transaction);
+
+        return UserResponse.builder()
+                .username(user.getUsername())
+                .name(user.getName())
+                .balance(user.getBalance())
                 .build();
     }
 }
