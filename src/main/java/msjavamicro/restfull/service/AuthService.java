@@ -33,7 +33,7 @@ public class AuthService {
 
         if (BCrypt.checkpw(request.getPassword(), user.getPassword())) {
             user.setToken(UUID.randomUUID().toString());
-            user.setTokenExpiredAt(next30Days());
+            user.setTokenExpiredAt(next7Days());
             userRepository.save(user);
 
             return TokenResponse.builder()
@@ -45,8 +45,8 @@ public class AuthService {
         }
     }
 
-    private Long next30Days() {
-        return System.currentTimeMillis() + (1000 * 60 * 24 * 30);
+    private Long next7Days() {
+        return System.currentTimeMillis() + (1000 * 60 * 24 * 7);
     }
 
     @Transactional
