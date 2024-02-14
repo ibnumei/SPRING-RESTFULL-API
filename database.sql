@@ -9,7 +9,7 @@ CREATE TABLE users
     name             VARCHAR(100) NOT NULL,
     token            VARCHAR(100),
     token_expired_at BIGINT,
-    balance          integer
+    balance          integer,
     PRIMARY KEY (username),
     UNIQUE (token)
 );
@@ -36,4 +36,16 @@ CREATE TABLE transaction
 	FOREIGN KEY fk_users_transaction (username) REFERENCES users (username),
     FOREIGN KEY fk_category_transaction (categoryId) REFERENCES category (id)
 
+);
+
+CREATE TABLE db_users_v2
+(
+    id_user			 VARCHAR(200) NOT NULL,
+    username         VARCHAR(100) NOT NULL,
+    password         VARCHAR(100) NOT NULL,
+    name             VARCHAR(100) NOT NULL,
+    token            VARCHAR(100),
+    token_expired_at BIGINT,
+    balance          integer,
+    PRIMARY KEY (id_user)
 );

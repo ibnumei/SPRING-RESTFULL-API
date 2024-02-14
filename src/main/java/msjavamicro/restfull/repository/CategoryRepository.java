@@ -16,4 +16,22 @@ public interface CategoryRepository extends JpaRepository<Category, String>  {
     Optional<Category> findFirstByUserAndCategoryName(User user, String categoryName);
     
     List<Category> findAllByUser(User user);
+
+    // // Mencari kategori pertama dengan nama "Belanja"
+    // Optional<Category> shoppingCategory = categoryRepository.findFirstByUserAndCategoryName(user, "Belanja");
+
+    // if (shoppingCategory.isPresent()) {
+    //     // Kategori ditemukan, lakukan sesuatu dengan shoppingCategory.get()
+    // } else {
+    //     // Kategori tidak ditemukan, lakukan tindakan alternatif
+    // }
+
+    // // Mencari semua kategori milik pengguna
+    // List<Category> allCategories = categoryRepository.findAllByUser(user);
+
+    // if (allCategories.isEmpty()) {
+    //     // Tidak ada kategori ditemukan
+    // } else {
+    //     // Tampilkan atau proses semua kategori dalam allCategories
+    // }
 }
