@@ -32,6 +32,16 @@ public class UserController {
         return WebResponse.<String>builder().data("OK").build();
     }
 
+    @PostMapping(
+            path = "/api/v2/users",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse<String> registerV2(@RequestBody RegisterUserRequest request) {
+        userService.registerV2(request);
+        return WebResponse.<String>builder().data("OK").build();
+    }
+
     @GetMapping(
             path = "/api/users/current",
             produces = MediaType.APPLICATION_JSON_VALUE

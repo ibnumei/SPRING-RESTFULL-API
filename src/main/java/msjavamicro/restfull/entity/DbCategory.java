@@ -1,7 +1,9 @@
 package msjavamicro.restfull.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -28,15 +30,16 @@ public class DbCategory {
     @GeneratedValue(generator = "system-uuid")
     @Column(name = "id_category")
     private String idCategory;
-    @Column(name = "id_user")
-    private String idUser;
+//    @Column(name = "id_user")
+//    private String idUser;
     @Column(name = "category_name")
     private String categoryName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_user", referencedColumnName = "id_user")
+    @JsonIgnore
     private DbUser dbUser;
 
-    @OneToMany(mappedBy = "id_category")
-    private List<DbTransaction> dbTransactions;
+//    @OneToMany(mappedBy = "id_category")
+//    private List<DbTransaction> dbTransactions;
 }

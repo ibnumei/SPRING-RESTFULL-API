@@ -2,6 +2,8 @@ package msjavamicro.restfull.service;
 
 import java.util.Objects;
 
+import msjavamicro.restfull.entity.DbUser;
+import msjavamicro.restfull.repository.UserRepositoryV2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class UserService {
     
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserRepositoryV2 userRepositoryV2;
 
     @Autowired
     private ValidationService validationService;
@@ -54,6 +59,28 @@ public class UserService {
         user.setBalance(0);
 
         userRepository.save(user);
+
+        CreateCategoryRequest category = new CreateCategoryRequest();
+        category.setCategoryName("TopUp");
+        CategoryResponse categoryResponse = categoryService.create(user, category);
+
+    }
+
+    @Transactional
+    public void registerV2(RegisterUserRequest request) {
+        validationService.validate(request);
+
+        if (userRepositoryV2.existsById(request.getUsername())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already registered");
+        }
+
+        DbUser user = DbUser.builder()
+                .username(request.getUsername())
+                .password(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()))
+                .name(request.getName())
+                .balance(0)
+                .build();
+        userRepositoryV2.save(user);
 
         CreateCategoryRequest category = new CreateCategoryRequest();
         category.setCategoryName("TopUp");
